@@ -1,12 +1,15 @@
 import type { Category } from "../types";
 
+const API_BASE_URL = 'https://gestion-stock-back-production.up.railway.app/api';
+
+
 export async function fetchCategories(): Promise<Category[]> {
 
   const token = localStorage.getItem('authToken');
   if (!token) {
     throw new Error('Aucun token trouvé');
   }
-  const response = await fetch('http://localhost:5000/api/categories', {
+  const response = await fetch(`${API_BASE_URL}/categories`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -19,7 +22,7 @@ export async function fetchCategories(): Promise<Category[]> {
 export async function createCategory(name: string): Promise<Category> {
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch('http://localhost:5000/api/categories', {
+  const response = await fetch(`${API_BASE_URL}/categories`, {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',

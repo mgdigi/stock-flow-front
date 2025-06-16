@@ -1,5 +1,7 @@
 import type { Product } from '../types';
 
+const API_BASE_URL = 'https://gestion-stock-back-production.up.railway.app/api';
+
 
 export async function fetchProducts(): Promise<Product[]> {
  const token = localStorage.getItem('authToken');
@@ -8,7 +10,7 @@ export async function fetchProducts(): Promise<Product[]> {
     throw new Error('Aucun token trouvé');
   }
 
-  const response = await fetch('http://localhost:5000/api/products', {
+  const response = await fetch(`${API_BASE_URL}/products`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -27,7 +29,7 @@ export async function fetchProducts(): Promise<Product[]> {
 export async function createProduct(product: Product): Promise<Product> {
  const token = localStorage.getItem('authToken');
 
-  const response = await fetch('http://localhost:5000/api/products', {
+  const response = await fetch(` ${API_BASE_URL}/products`, {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',

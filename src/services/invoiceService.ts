@@ -324,7 +324,7 @@ function getImageFormatFromPath(path: string): 'JPEG' | 'PNG' | 'WEBP' {
 
 function getServerUrl(): string {
   if (window.location.hostname === 'localhost') {
-    return 'http://localhost:5000';
+    return 'https://gestion-stock-back-production.up.railway.app/api';
   }
   return window.location.origin;
 }

@@ -1,9 +1,12 @@
 import type { Sale } from "../types";
 
+const API_BASE_URL = 'https://gestion-stock-back-production.up.railway.app/api';
+
+
 export async function fetchSales(): Promise<Sale[]> {
  const token = localStorage.getItem('authToken');
 
-  const response = await fetch('http://localhost:5000/api/sales', {
+  const response = await fetch(`${API_BASE_URL}/sales`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -19,7 +22,7 @@ export async function fetchSales(): Promise<Sale[]> {
   }): Promise<Sale> {
      const token = localStorage.getItem('authToken');
 
-    const response = await fetch('http://localhost:5000/api/sales', {
+    const response = await fetch(`${API_BASE_URL}/sales`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
