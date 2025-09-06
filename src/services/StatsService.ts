@@ -75,7 +75,7 @@ export class StatsService {
       // Calculer les ventes par produit
       sales.forEach(sale => {
         sale.products.forEach(p => {
-          const productId = p.product;
+          const productId = p.product._id;
           const product = products.find(prod => prod._id === productId);
           
           if (product) {

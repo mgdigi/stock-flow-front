@@ -414,7 +414,7 @@ export class DashboardPage {
       const facturesPagination = new PaginationManager<any>(
         container,
         "#factures-pagination", // Assurez-vous d'avoir cet élément dans votre HTML
-        (paginatedSales, startIndex) => {
+        (paginatedSales) => {
           facturesContainer.innerHTML = paginatedSales
             .map((sale) => {
               const total = calculateSafeTotal(sale);
