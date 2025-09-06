@@ -1,5 +1,6 @@
 export interface Product {
-  id: string;        
+  _id: string;
+  id?: string; // Ajout pour compatibilité        
   name: string;
   price: number;
   quantity:number;
@@ -18,20 +19,27 @@ export interface Category{
 
 export interface Sale {
   _id: string;
-  client: [{
+  id?: string; // Ajout pour compatibilité
+  client?: {
     name: string;
     email: string;
-    phone: string;}];
-  products: [
-    {
-      product: string;
-      quantity: number;
-      unitPrice: number;
-      total: number;
-    }
-  ];
+    phone: string;
+  };
+  clientInfo?: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  products: {
+    productId?: string; // Ajout pour compatibilité
+    quantity: number;
+    unitPrice?: number;
+    total?: number;
+    product:  { _id: string; name?: string };
+  }[];
   date: string;
-  total: number;  
+  total?: number;  
+  totalAmount?: number;
 }
 
 export interface User {

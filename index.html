@@ -1,203 +1,23 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProStock - Authentification</title>
+    <title>ProStock - Gestion Intelligente</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="stylesheet" href="./src/style.css">
-   
 </head>
-<body class="min-h-screen gradient-bg flex items-center justify-center p-4 relative">
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-
-    <div class="w-full max-w-md relative z-10">
-        <div class="text-center mb-8 animate-fade-in">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-4 backdrop-blur-sm">
-                <span class="text-white font-bold text-2xl">PS</span>
+<body class="h-full w-full m-0 p-0 overflow-hidden">
+    <div id="app" class="h-full w-full">
+        <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100">
+            <div class="text-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p class="text-gray-600">Chargement de l'application...</p>
             </div>
-            <h1 class="text-3xl font-bold text-white mb-2">ProStock</h1>
-            <p class="text-white/80">Gestion Intelligente</p>
-        </div>
-
-        <div id="loginForm" class="glass-effect rounded-3xl p-8 shadow-2xl animate-slide-up">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-white mb-2">Connexion</h2>
-                <p class="text-white/70">Accédez à votre tableau de bord</p>
-            </div>
-
-            <form class="loginForm space-y-6">
-                <div class="space-y-4">
-                    <div class="relative">
-                        <input type="email" name="username" id="login-username" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Adresse email" >
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <input type="password" name="password" id="login-password"  class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Mot de passe" >
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <button type="button" onclick="togglePassword('password')" class="text-white/60 hover:text-white transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <label class="flex items-center text-sm text-white/80">
-                        <input type="checkbox" class="mr-2 rounded bg-white/10 border-white/20 text-blue-500 focus:ring-blue-500 focus:ring-offset-0">
-                        Se souvenir de moi
-                    </label>
-                    <a href="#" class="text-sm text-white/80 hover:text-white transition-colors">Mot de passe oublié ?</a>
-                </div>
-
-                <button type="submit" class="login-btn w-full bg-white text-purple-600 py-4 rounded-2xl font-semibold hover:bg-white/90 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Se connecter
-                </button>
-            </form>
-
-            <div class="mt-6 text-center">
-                <p class="text-white/70 mb-4">Pas encore de compte ?</p>
-                <button  class="to-register text-white underline hover:text-white/80 transition-colors font-medium">
-                    Créer un compte
-                </button>
-            </div>
-        </div>
-
-        <div id="registerForm" class="glass-effect rounded-3xl p-8 shadow-2xl animate-slide-up hidden">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-white mb-2">Inscription</h2>
-                <p class="text-white/70">Créez votre compte  ProStock</p>
-            </div>
-
-            <form class="space-y-6">
-                <div class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="relative">
-                            <input id="prenom" type="text" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Prénom" required>
-                        </div>
-                        <div class="relative">
-                            <input id="nom" type="text" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Nom" required>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-
-                    <div class="relative">
-                        <input id="adresse" type="text" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Adresse de l'entreprise" required>
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <input id="telephone" type="text" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Telephone de l'entreprise" required>
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                        </div>
-                    </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-
-                    <div class="relative">
-                        <input id="username" type="email" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Adresse email" required>
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <input id="entreprise" type="text" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Nom de l'entreprise" required>
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                        </div>
-                    </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                    <div class="relative">
-                        <input id="password" type="password" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Mot de passe" required>
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <button type="button" onclick="togglePassword('newPassword')" class="text-white/60 hover:text-white transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <input type="password" id="confirm-password" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Confirmer le mot de passe" required>
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <button type="button" onclick="togglePassword('confirmPassword')" class="text-white/60 hover:text-white transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                        <input type="file" id="logo" name="logo" accept="image/*" class="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent input-focus transition-all duration-300" placeholder="Confirmer le mot de passe" required>
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <button type="button" class="text-white/60 hover:text-white transition-colors">
-                                <i class="fa-solid fa-camera"></i>
-                            </button>
-                        </div>
-                    </div>
-                 </div>
-
-                 
-
-                <div class="flex items-start">
-                    <input type="checkbox" class="mt-1 mr-3 rounded bg-white/10 border-white/20 text-blue-500 focus:ring-blue-500 focus:ring-offset-0" required>
-                    <label class="text-sm text-white/80">
-                        J'accepte les <a href="#" class="text-white underline hover:text-white/80 transition-colors">conditions d'utilisation</a> et la <a href="#" class="text-white underline hover:text-white/80 transition-colors">politique de confidentialité</a>
-                    </label>
-                </div>
-
-                <button type="submit" id="register-btn" class="w-full bg-white text-purple-600 py-4 rounded-2xl font-semibold hover:bg-white/90 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Créer mon compte
-                </button>
-            </form>
-
-            <div class="mt-6 text-center">
-                <p class="text-white/70 mb-4">Déjà un compte ?</p>
-                <button class="to-login text-white underline hover:text-white/80 transition-colors font-medium">
-                    Se connecter
-                </button>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="text-center mt-8 text-white/60 text-sm">
-            <p>&copy; 2025 ProStock. Tous droits réservés.</p>
         </div>
     </div>
-
-    <script type="module" src="./src/auth.ts" defer>   </script>
+    
+    <script type="module" src="./src/app.ts"></script>
 </body>
 </html>

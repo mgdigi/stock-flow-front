@@ -1,7 +1,5 @@
 import type { Sale } from "../types";
-
-const API_BASE_URL = 'https://gestion-stock-back-production.up.railway.app/api';
-
+import { API_BASE_URL } from '../config/api';
 
 export async function fetchSales(): Promise<Sale[]> {
  const token = localStorage.getItem('authToken');
