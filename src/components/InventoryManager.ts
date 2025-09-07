@@ -206,7 +206,7 @@ export class InventoryManager {
 
   private formatProductsForMovement(saleProducts: any[], allProducts: any[]): string {
     return saleProducts.map(p => {
-      const product = allProducts.find(prod => prod._id === p.product);
+      const product = allProducts.find(prod => prod._id === p.product._id);
       return `${product?.name || 'Produit inconnu'} (${p.quantity})`;
     }).slice(0, 2).join(', ') + (saleProducts.length > 2 ? '...' : '');
   }

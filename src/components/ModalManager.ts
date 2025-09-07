@@ -96,7 +96,6 @@ export class ModalManager {
   async showSaleModal() {
     const modalsContainer = this.getModalsContainer();
 
-    // Charger les produits
     let products: any[] = [];
     try {
       products = await fetchProducts();
@@ -190,13 +189,11 @@ export class ModalManager {
     modalsContainer: HTMLElement,
     onSuccess?: () => void
   ) {
-    // Close modal functionality
     const closeBtn = modalsContainer.querySelector("#close-product-modal");
     closeBtn?.addEventListener("click", () => {
       modalsContainer.innerHTML = "";
     });
 
-    // Form submission
     const productForm = modalsContainer.querySelector("#product-form");
     productForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -235,13 +232,11 @@ export class ModalManager {
     modalsContainer: HTMLElement,
     onSuccess?: () => void
   ) {
-    // Close modal functionality
     const closeBtn = modalsContainer.querySelector("#close-category-modal");
     closeBtn?.addEventListener("click", () => {
       modalsContainer.innerHTML = "";
     });
 
-    // Form submission
     const categoryForm = modalsContainer.querySelector("#category-form");
     categoryForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -415,6 +410,87 @@ export class ModalManager {
     }
   }
 
+  // private async handleSaleSubmission(
+  //   form: HTMLFormElement,
+  //   modalsContainer: HTMLElement
+  // ) {
+  //   const formData = new FormData(form);
+
+  //   // Collect client data
+  //   const clientData = {
+  //     name: formData.get("client_name") as string,
+  //     email: formData.get("client_email") as string,
+  //     phone: formData.get("client_phone") as string,
+  //   };
+
+  //   // Collect products data
+  //   const productLines = modalsContainer.querySelectorAll(".product-line");
+  //   const products = Array.from(productLines)
+  //     .map((line) => {
+  //       const productSelect = line.querySelector(
+  //         'select[name="product"]'
+  //       ) as HTMLSelectElement;
+  //       const quantityInput = line.querySelector(
+  //         'input[name="quantity"]'
+  //       ) as HTMLInputElement;
+
+  //       return {
+  //         productId: productSelect.value,
+  //         quantity: parseInt(quantityInput.value),
+  //       };
+  //     })
+  //     .filter((product) => product.productId && product.quantity > 0);
+
+  //   if (products.length === 0) {
+  //     Notifications.warning(
+  //       "Attention",
+  //       "Veuillez ajouter au moins un produit"
+  //     );
+  //     return;
+  //   }
+
+  //   const submitBtn = form.querySelector(
+  //     'button[type="submit"]'
+  //   ) as HTMLButtonElement;
+  //   submitBtn.disabled = true;
+  //   submitBtn.textContent = "Création...";
+
+  //   try {
+  //     const newSale = await createSale({
+  //       clientInfo: clientData,
+  //       products: products,
+  //     });
+
+  //     try {
+  //       await generateInvoicePDF(newSale);
+  //       Notifications.success(
+  //         "Succès",
+  //         "Vente créée avec succès ! Facture générée automatiquement !"
+  //       );
+  //     } catch (error) {
+  //       console.error("Erreur lors de la génération de la facture:", error);
+  //       Notifications.warning(
+  //         "Succès partiel",
+  //         "Vente créée avec succès ! Erreur lors de la génération de la facture: " +
+  //           (error as Error).message
+  //       );
+  //     }
+
+  //     modalsContainer.innerHTML = "";
+
+  //     window.location.reload(); // Pour recharger toutes les stats
+  //   } catch (error) {
+  //     console.error("Erreur lors de la création de la vente:", error);
+  //     Notifications.error(
+  //       "Erreur",
+  //       "Erreur lors de la création de la vente: " + (error as Error).message
+  //     );
+  //   } finally {
+  //     submitBtn.disabled = false;
+  //     submitBtn.textContent = "Créer la vente";
+  //   }
+  // }
+
   private async handleSaleSubmission(
     form: HTMLFormElement,
     modalsContainer: HTMLElement
@@ -461,19 +537,37 @@ export class ModalManager {
     submitBtn.textContent = "Création...";
 
     try {
-      // Créer la vente
       const newSale = await createSale({
         clientInfo: clientData,
         products: products,
       });
 
-      // GÉNÉRATION AUTOMATIQUE DE FACTURE - FONCTIONNALITÉ ESSENTIELLE
+      console.log("Vente créée avec succès:", newSale);
+
       try {
-        await generateInvoicePDF(newSale);
+        // Générer et ouvrir la facture directement
+        const {fetchSales} = await import("../services/dataService");
+        const sales = await fetchSales(); 
+        const latestSale = sales.find(sale => sale._id === newSale._id);
+        if (latestSale) {
+          newSale.client = latestSale.client; 
+          newSale.products = latestSale.products;
+        }
+        
+        await generateInvoicePDF(newSale, true); 
         Notifications.success(
           "Succès",
-          "Vente créée avec succès ! Facture générée automatiquement !"
+          "Vente créée avec succès !"
         );
+        
+        // Fermer le modal
+        modalsContainer.innerHTML = "";
+        
+        // Attendre un court instant pour permettre l'ouverture de la facture
+        setTimeout(() => {
+          window.location.reload(); // Recharger les stats après
+        }, 1000);
+        
       } catch (error) {
         console.error("Erreur lors de la génération de la facture:", error);
         Notifications.warning(
@@ -481,12 +575,9 @@ export class ModalManager {
           "Vente créée avec succès ! Erreur lors de la génération de la facture: " +
             (error as Error).message
         );
+        modalsContainer.innerHTML = "";
+        window.location.reload();
       }
-
-      modalsContainer.innerHTML = "";
-
-      // Recharger toutes les données
-      window.location.reload(); // Pour recharger toutes les stats
     } catch (error) {
       console.error("Erreur lors de la création de la vente:", error);
       Notifications.error(

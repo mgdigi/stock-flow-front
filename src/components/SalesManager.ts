@@ -13,7 +13,7 @@ export class SalesManager {
       container,
       '#sales-pagination',
       (paginatedSales, startIndex) => this.renderSalesTable(paginatedSales, startIndex),
-      10
+      6
     );
   }
 
@@ -26,7 +26,6 @@ export class SalesManager {
       
       this.allProducts = products;
       
-      // Utiliser la pagination
       this.paginationManager.setItems(sales);
     } catch (error) {
       console.error('Erreur lors du chargement des ventes:', error);

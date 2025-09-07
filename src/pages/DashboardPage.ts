@@ -55,7 +55,6 @@ export class DashboardPage {
   }
 
   private initializeComponents() {
-    // Render components
     const sidebarElement = this.container.querySelector("#sidebar");
     const headerElement = this.container.querySelector("#header");
     const statsCardsElement = this.container.querySelector("#stats-cards");
@@ -74,12 +73,10 @@ export class DashboardPage {
   }
 
   private async loadDashboardWithStats() {
-    // Charger les statistiques d'abord
     await this.dashboardStats.loadStats();
   }
 
   private setupEventListeners() {
-    // Navigation listeners
     const navLinks = this.container.querySelectorAll("[data-section]");
     navLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
@@ -110,7 +107,6 @@ export class DashboardPage {
   }
 
   private navigateToSection(section: string) {
-    // Update active navigation
     this.container.querySelectorAll("[data-section]").forEach((link) => {
       link.classList.remove("sidebar-active", "text-blue-600");
       link.classList.add("text-gray-600");
@@ -148,7 +144,6 @@ export class DashboardPage {
     ) as HTMLElement;
     if (!mainContent) return;
 
-    // Show loading state
     mainContent.innerHTML = `
       <div class="text-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -236,7 +231,7 @@ export class DashboardPage {
                   product.price || 0
                 ).toLocaleString()} FCFA</td>
                 <td class="px-4 py-2 border-r">${product.threshold || 7}</td>
-                <td class="px-4 py-2 border-r">${product.category || "N/A"}</td>
+                <td class="px-4 py-2 border-r">${product.category.name || "N/A"}</td>
                 <td class="px-4 py-2">${new Date(
                   product.createdAt
                 ).toLocaleDateString()}</td>
@@ -285,7 +280,7 @@ export class DashboardPage {
               .join("");
           }
         },
-        5 
+        6
       );
 
       categoriesPagination.setItems(categories);
@@ -294,110 +289,6 @@ export class DashboardPage {
     }
   }
 
-  // private async loadFacturesData(container: HTMLElement) {
-  //   try {
-  //     const { fetchSales, fetchProducts } = await import(
-  //       "../services/dataService"
-  //     );
-  //     const [sales, products] = await Promise.all([
-  //       fetchSales(),
-  //       fetchProducts(),
-  //     ]);
-  //     const facturesContainer = container.querySelector("#invoice-sales-list");
-  //     if (facturesContainer) {
-  //       facturesContainer.innerHTML = sales
-  //         .map((sale) => {
-  //           const total = calculateSafeTotal(sale);
-  //           const productsDisplay = this.getProductNamesForSale(
-  //             sale.products,
-  //             products
-  //           );
-  //           const safeClient = getSafeClient(sale);
-
-  //           return `
-  //           <div class="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition-all duration-300 border border-gray-100 backdrop-blur-sm">
-  //             <div class="flex justify-between items-start mb-6">
-  //               <div class="space-y-2">
-  //                 <div class="flex items-center gap-2">
-  //                   <i class="fa-solid fa-user-circle text-blue-500"></i>
-  //                   <h3 class="text-xl font-semibold text-gray-800">
-  //                     ${safeClient.name}
-  //                   </h3>
-  //                 </div>
-  //                 <div class="flex items-center gap-2 text-gray-600">
-  //                   <i class="fa-solid fa-envelope text-sm"></i>
-  //                   <p class="text-sm">${safeClient.email}</p>
-  //                 </div>
-  //                 <div class="flex items-center gap-2 text-gray-600">
-  //                   <i class="fa-solid fa-phone text-sm"></i>
-  //                   <p class="text-sm">${safeClient.phone}</p>
-  //                 </div>
-  //               </div>
-  //               <div class="text-right space-y-2">
-  //                 <div class="flex items-center justify-end gap-2 text-gray-500">
-  //                   <i class="fa-solid fa-calendar-alt"></i>
-  //                   <p class="text-sm">${new Date(sale.date).toLocaleDateString()}</p>
-  //                 </div>
-  //                 <div class="bg-blue-50 rounded-lg p-2">
-  //                   <p class="text-xl font-bold text-blue-600">
-  //                     ${total.toLocaleString()} FCFA
-  //                   </p>
-  //                 </div>
-  //               </div>
-  //             </div>
-              
-  //             <div class="mb-6">
-  //               <div class="flex items-center gap-2 mb-3">
-  //                 <i class="fa-solid fa-box text-blue-500"></i>
-  //                 <h4 class="font-medium text-gray-700">Produits</h4>
-  //               </div>
-  //               <div class="bg-gray-50 rounded-lg p-4">
-  //                 <div class="text-sm text-gray-600 space-y-2 divide-y divide-gray-200">
-  //                   ${productsDisplay}
-  //                 </div>
-  //               </div>
-  //             </div>
-              
-  //             <div class="flex justify-end mt-4">
-  //               <button 
-  //                 onclick="window.generateInvoice('${sale._id}')" 
-  //                 class="group bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 
-  //                        transition-all duration-300 flex items-center gap-3 hover:gap-4">
-  //                 <i class="fa-solid fa-file-pdf"></i>
-  //                 <span>Générer Facture</span>
-  //                 <i class="fa-solid fa-arrow-right opacity-0 group-hover:opacity-100 
-  //                        transition-all duration-300"></i>
-  //               </button>
-  //             </div>
-  //           </div>
-  //         `;
-  //         })
-  //         .join("");
-
-  //       (window as any).generateInvoice = async (saleId: string) => {
-  //         try {
-  //           const { generateInvoicePDF } = await import(
-  //             "../services/dataService"
-  //           );
-  //           const sale = sales.find((s) => s._id === saleId);
-  //           if (sale) {
-  //             await generateInvoicePDF(sale);
-  //             Notifications.success("Succès", "Facture générée avec succès !");
-  //           }
-  //         } catch (error) {
-  //           console.error("Erreur lors de la génération de la facture:", error);
-  //           Notifications.error(
-  //             "Erreur",
-  //             "Erreur lors de la génération de la facture: " +
-  //               (error as Error).message
-  //           );
-  //         }
-  //       };
-  //     }
-  //   } catch (error) {
-  //     console.error("Erreur lors du chargement des factures:", error);
-  //   }
-  // }
 
   private async loadFacturesData(container: HTMLElement) {
   try {
@@ -410,10 +301,9 @@ export class DashboardPage {
     
     const facturesContainer = container.querySelector("#invoice-sales-list");
     if (facturesContainer) {
-      // Configuration de la pagination pour les factures
       const facturesPagination = new PaginationManager<any>(
         container,
-        "#factures-pagination", // Assurez-vous d'avoir cet élément dans votre HTML
+        "#factures-pagination", 
         (paginatedSales) => {
           facturesContainer.innerHTML = paginatedSales
             .map((sale) => {
@@ -481,18 +371,18 @@ export class DashboardPage {
             })
             .join("");
         },
-        3// Nombre de factures par page
+        3
       );
 
-      // Initialiser la pagination avec toutes les ventes
-      // facturesPagination.setItems(sales);
+      
        facturesPagination.setItems(sortedSales);
 
-      // Configuration du gestionnaire de génération de factures
+     
       (window as any).generateInvoice = async (saleId: string) => {
         try {
           const { generateInvoicePDF } = await import("../services/dataService");
           const sale = sales.find((s) => s._id === saleId);
+          console.log("Génération de la facture pour la vente:", sale);
           if (sale) {
             await generateInvoicePDF(sale);
             Notifications.success("Succès", "Facture générée avec succès !");

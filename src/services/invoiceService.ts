@@ -2,7 +2,7 @@ import type { Sale } from "../types";
 import { API_BASE_URL } from "../config/api";
 import { Notifications } from "../utils/notifications";
 
-export async function generateInvoicePDF(sale: Sale): Promise<void> {
+export async function generateInvoicePDF(sale: Sale, openDirectly: boolean = false): Promise<void> {
   const userInfo = localStorage.getItem("userInfo");
   const COMPANY_INFO = JSON.parse(userInfo || "{}");
   
@@ -22,12 +22,12 @@ export async function generateInvoicePDF(sale: Sale): Promise<void> {
   }
 
   const products = await response.json();
+  console.log("Produits récupérés pour la facture:", products);
 
   const { jsPDF } = await import("jspdf");
 
   const doc = new jsPDF();
 
-  // Palette de couleurs simple : bleu et blanc uniquement
   const primaryBlue: [number, number, number] = [59, 130, 246]; // Bleu moderne
   const lightBlue: [number, number, number] = [147, 197, 253]; // Bleu clair
   const darkBlue: [number, number, number] = [29, 78, 216]; // Bleu foncé
@@ -257,11 +257,11 @@ export async function generateInvoicePDF(sale: Sale): Promise<void> {
       doc.roundedRect(15, yPos, 180, 12, 3, 3, "F");
     }
 
-    // Trouver les détails du produit
+ 
      
-
+   
     const product = products.find((p: any) => {  
-       p._id === item.product._id
+      return  p._id === item.product._id
        }
   
   );
@@ -271,7 +271,6 @@ export async function generateInvoicePDF(sale: Sale): Promise<void> {
 
     calculatedTotal += lineTotal;
 
-    // Affichage sans caractères spéciaux
     doc.text(String(productName), 22, yPos + 8);
     doc.text(String(item.quantity), 90, yPos + 8);
     doc.text(`${unitPrice} FCFA`, 115, yPos + 8);
@@ -364,6 +363,46 @@ export async function generateInvoicePDF(sale: Sale): Promise<void> {
     const clientNameForFile = sale.client?.name || sale.clientInfo?.name || "Client";
     const filename = `Facture_${sale._id?.slice(-8) || "N/A"}_${String(clientNameForFile).replace(/\s+/g, "_")}.pdf`;
 
+     if (openDirectly) {
+      // Ouvrir directement dans un nouvel onglet avec iframe
+      const pdfDataUri = doc.output("datauristring");
+      const newWindow = window.open("", "_blank");
+      if (newWindow) {
+        newWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>Facture - ${clientNameForFile}</title>
+              <style>
+                body { margin: 0; padding: 0; }
+                .container { 
+                  width: 100vw; 
+                  height: 100vh; 
+                  display: flex; 
+                  flex-direction: column;
+                }
+                iframe { 
+                  flex: 1;
+                  border: none;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <iframe src="${pdfDataUri}" width="100%" height="100%"></iframe>
+              </div>
+            </body>
+          </html>
+        `);
+        newWindow.document.close();
+      } else {
+        Notifications.warning(
+          "Attention",
+          "Veuillez autoriser les pop-ups pour afficher la facture"
+        );
+      }
+     }else{ 
+
     setTimeout(() => {
       try {
         const pdfBlob = doc.output("blob");
@@ -403,6 +442,7 @@ export async function generateInvoicePDF(sale: Sale): Promise<void> {
         }
       }
     }, 500);
+  }
   } catch (saveError) {
     console.error("Erreur lors de la sauvegarde:", saveError);
 
